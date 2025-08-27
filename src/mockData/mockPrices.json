@@ -1,0 +1,19 @@
+{
+  "prices": {
+    "BTC": {
+      "currentPrice": 43250,
+      "price24hAgo": 42200,
+      "lastUpdated": "2024-08-05T12:00:00Z"
+    },
+    "ETH": {
+      "currentPrice": 2580,
+      "price24hAgo": 2612,
+      "lastUpdated": "2024-08-05T12:00:00Z"
+    },
+    "ADA": {
+      "currentPrice": 0.52,
+      "price24hAgo": 0.50,
+      "lastUpdated": "2024-08-05T12:00:00Z"
+    }
+  }
+}

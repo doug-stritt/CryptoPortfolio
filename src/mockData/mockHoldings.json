@@ -1,0 +1,28 @@
+{
+  "holdings": [
+    {
+      "id": "1",
+      "symbol": "BTC",
+      "name": "Bitcoin",
+      "quantity": 0.5,
+      "purchasePrice": 35000,
+      "purchaseDate": "2024-01-15T00:00:00Z"
+    },
+    {
+      "id": "2",
+      "symbol": "ETH",
+      "name": "Ethereum",
+      "quantity": 2.0,
+      "purchasePrice": 2200,
+      "purchaseDate": "2024-02-01T00:00:00Z"
+    },
+    {
+      "id": "3",
+      "symbol": "ADA",
+      "name": "Cardano",
+      "quantity": 1000,
+      "purchasePrice": 0.45,
+      "purchaseDate": "2024-03-10T00:00:00Z"
+    }
+  ]
+}
