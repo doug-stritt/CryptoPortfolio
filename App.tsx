@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, FlatList, SafeAreaView, Text, View } from 'react-native';
 import { CryptoAssetItem } from './src/components/CryptoAssetItem';
+import { PortfolioHeader } from './src/components/PortfolioHeader';
 import { useComputedCryptoAssets, usePortfolioLoading, usePortfolioError } from './src/store';
 
 export default function App() {
@@ -31,6 +32,7 @@ export default function App() {
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
+      <PortfolioHeader />
       <FlatList
         data={cryptoAssets}
         renderItem={({ item }) => <CryptoAssetItem item={item} />}
@@ -63,6 +65,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   listContainer: {
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
   },
 });
