@@ -26,7 +26,7 @@ Before you begin, ensure you have the following installed:
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone git@github.com:doug-stritt/CryptoPortfolio.git
    cd CryptoPortfolio
    ```
 
@@ -50,6 +50,8 @@ Before you begin, ensure you have the following installed:
    ```
 
 ## Testing
+
+**Run unit and integration tests**
 
    ```bash
    npm test
