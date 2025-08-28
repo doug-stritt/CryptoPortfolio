@@ -57,13 +57,13 @@ export const useComputedCryptoAssets = () => {
       name: holding.name,
       ticker: holding.symbol,
       currentPrice: priceData.currentPrice,
-      dailyChange: dailyChange,
+      dailyChange,
       quantity: holding.quantity,
       purchasePrice: holding.purchasePrice,
-      currentValue: currentValue,
-      purchaseCost: purchaseCost,
-      profitLoss: profitLoss,
-      percentageChange: percentageChange,
+      currentValue,
+      purchaseCost,
+      profitLoss,
+      percentageChange,
       priceUnavailable: false,
     };
   });

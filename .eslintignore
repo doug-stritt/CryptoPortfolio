@@ -1,0 +1,13 @@
+node_modules/
+dist/
+build/
+coverage/
+*.config.js
+*.config.ts
+jest.config.js
+jest.setup.js
+app.json
+metro.config.js
+babel.config.js
+expo/
+assets/
