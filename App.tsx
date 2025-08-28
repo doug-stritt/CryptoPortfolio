@@ -2,6 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, FlatList, SafeAreaView, Text, View } from 'react-native';
 import { CryptoAssetItem } from './src/components/CryptoAssetItem';
 import { PortfolioHeader } from './src/components/PortfolioHeader';
+import { PortfolioFooter } from './src/components/PortfolioFooter';
 import { useComputedCryptoAssets, usePortfolioLoading, usePortfolioError } from './src/store';
 
 export default function App() {
@@ -40,6 +41,7 @@ export default function App() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContainer}
       />
+      <PortfolioFooter />
     </SafeAreaView>
   );
 }

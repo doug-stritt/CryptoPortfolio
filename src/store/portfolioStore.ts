@@ -11,12 +11,14 @@ interface PortfolioState {
   prices: PriceData | null;
   loading: boolean;
   error: string | null;
+  lastFetched: Date | null;
 
   // Actions
   setHoldings: (holdings: HoldingsData) => void;
   setPrices: (prices: PriceData) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  setLastFetched: (date: Date) => void;
 
   // Async actions
   fetchHoldings: () => Promise<void>;
@@ -30,12 +32,14 @@ export const usePortfolioStore = create<PortfolioState>((set, get) => ({
   prices: mockPrices,
   loading: false,
   error: null,
+  lastFetched: null,
 
   // Synchronous actions
   setHoldings: (holdings) => set({ holdings }),
   setPrices: (prices) => set({ prices }),
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
+  setLastFetched: (date) => set({ lastFetched: date }),
 
   // Async actions
   fetchHoldings: async () => {
@@ -44,6 +48,7 @@ export const usePortfolioStore = create<PortfolioState>((set, get) => ({
       const { portfolioApi } = await import('../services/api');
       const holdings = await portfolioApi.getHoldings();
       set({ holdings, loading: false });
+      set({ lastFetched: new Date() });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to fetch holdings';
       set({ error: errorMessage, loading: false });
@@ -59,6 +64,7 @@ export const usePortfolioStore = create<PortfolioState>((set, get) => ({
       const { marketApi } = await import('../services/api');
       const prices = await marketApi.getPrices(symbols);
       set({ prices, loading: false });
+      set({ lastFetched: new Date() });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to fetch prices';
       set({ error: errorMessage, loading: false });
@@ -72,6 +78,7 @@ export const usePortfolioStore = create<PortfolioState>((set, get) => ({
       const { portfolioService } = await import('../services/api');
       const { holdings, prices } = await portfolioService.getPortfolioData();
       set({ holdings, prices, loading: false });
+      set({ lastFetched: new Date() });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to fetch portfolio data';
       set({ error: errorMessage, loading: false });
@@ -85,6 +92,7 @@ export const useHoldings = () => usePortfolioStore((state) => state.holdings);
 export const usePrices = () => usePortfolioStore((state) => state.prices);
 export const usePortfolioLoading = () => usePortfolioStore((state) => state.loading);
 export const usePortfolioError = () => usePortfolioStore((state) => state.error);
+export const useLastFetched = () => usePortfolioStore((state) => state.lastFetched);
 
 // Computed selectors
 export const usePortfolioData = () => {
