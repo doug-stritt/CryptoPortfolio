@@ -42,7 +42,7 @@ export const PortfolioFooter: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingVertical: 8,
     alignItems: 'center',
     borderTopWidth: 1,
     borderTopColor: '#e9ecef',
@@ -53,12 +53,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loadingText: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#6c757d',
     marginLeft: 8,
   },
   lastUpdatedText: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#6c757d',
   },
 });

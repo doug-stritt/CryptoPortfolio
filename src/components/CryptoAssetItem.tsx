@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   },
   detailsGrid: {
     flexDirection: 'row',
-    marginBottom: 20,
+    marginBottom: 6,
   },
   detailColumn: {
     flex: 1,
