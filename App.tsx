@@ -1,45 +1,32 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, FlatList, SafeAreaView } from 'react-native';
-import { useMemo } from 'react';
-import { CryptoAsset, PriceData, HoldingsData } from './src/types';
+import { StyleSheet, FlatList, SafeAreaView, Text, View } from 'react-native';
 import { CryptoAssetItem } from './src/components/CryptoAssetItem';
-
-// Import mock data
-const mockPrices: PriceData = require('./src/mockData/mockPrices.json');
-const mockHoldings: HoldingsData = require('./src/mockData/mockHoldings.json');
+import { useComputedCryptoAssets, usePortfolioLoading, usePortfolioError } from './src/store';
 
 export default function App() {
-  const cryptoAssets = useMemo(() => {
-    return mockHoldings.holdings.map((holding) => {
-      const priceData = mockPrices.prices[holding.symbol];
+  const cryptoAssets = useComputedCryptoAssets();
+  const loading = usePortfolioLoading();
+  const error = usePortfolioError();
 
-      if (!priceData) {
-        throw new Error(`No price data found for ${holding.symbol}`);
-      }
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.centerContainer}>
+          <Text style={styles.loadingText}>Loading portfolio...</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
-      const currentValue = holding.quantity * priceData.currentPrice;
-      const purchaseCost = holding.quantity * holding.purchasePrice;
-      const profitLoss = currentValue - purchaseCost;
-      const percentageChange = ((currentValue - purchaseCost) / purchaseCost) * 100;
-
-      // Calculate daily change percentage
-      const dailyChange = ((priceData.currentPrice - priceData.price24hAgo) / priceData.price24hAgo) * 100;
-
-      return {
-        id: holding.id,
-        name: holding.name,
-        ticker: holding.symbol,
-        currentPrice: priceData.currentPrice,
-        dailyChange: dailyChange,
-        quantity: holding.quantity,
-        purchasePrice: holding.purchasePrice,
-        currentValue: currentValue,
-        purchaseCost: purchaseCost,
-        profitLoss: profitLoss,
-        percentageChange: percentageChange,
-      } as CryptoAsset;
-    });
-  }, []);
+  if (error) {
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.centerContainer}>
+          <Text style={styles.errorText}>Error: {error}</Text>
+        </View>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -59,6 +46,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8f9fa',
+  },
+  centerContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 20,
+  },
+  loadingText: {
+    fontSize: 16,
+    color: '#6c757d',
+  },
+  errorText: {
+    fontSize: 16,
+    color: '#dc3545',
+    textAlign: 'center',
   },
   listContainer: {
     padding: 20,

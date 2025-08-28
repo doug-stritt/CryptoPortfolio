@@ -24,6 +24,22 @@ export const CryptoAssetItem: React.FC<CryptoAssetItemProps> = ({ item }) => {
   const isPositive = item.dailyChange >= 0;
   const isProfit = item.profitLoss >= 0;
 
+  // Helper function to display price or unavailable message
+  const displayPrice = (price: number) => {
+    if (item.priceUnavailable) {
+      return 'Price unavailable';
+    }
+    return formatCurrency(price);
+  };
+
+  // Helper function to display percentage or unavailable message
+  const displayPercentage = (percentage: number) => {
+    if (item.priceUnavailable) {
+      return 'N/A';
+    }
+    return formatPercentage(percentage);
+  };
+
   return (
     <View style={styles.assetContainer}>
       {/* Header */}
@@ -33,12 +49,16 @@ export const CryptoAssetItem: React.FC<CryptoAssetItemProps> = ({ item }) => {
           <Text style={styles.assetTicker}>{item.ticker}</Text>
         </View>
         <View style={styles.priceInfo}>
-          <Text style={styles.currentPrice}>{formatCurrency(item.currentPrice)}</Text>
-          <View style={[styles.dailyChangeBadge, isPositive ? styles.positiveChange : styles.negativeChange]}>
-            <Text style={[styles.dailyChangeText, isPositive ? styles.positiveText : styles.negativeText]}>
-              {formatPercentage(item.dailyChange)}
-            </Text>
-          </View>
+          <Text style={[styles.currentPrice, item.priceUnavailable && styles.unavailableText]}>
+            {displayPrice(item.currentPrice)}
+          </Text>
+          {!item.priceUnavailable && (
+            <View style={[styles.dailyChangeBadge, isPositive ? styles.positiveChange : styles.negativeChange]}>
+              <Text style={[styles.dailyChangeText, isPositive ? styles.positiveText : styles.negativeText]}>
+                {displayPercentage(item.dailyChange)}
+              </Text>
+            </View>
+          )}
         </View>
       </View>
 
@@ -59,7 +79,9 @@ export const CryptoAssetItem: React.FC<CryptoAssetItemProps> = ({ item }) => {
         <View style={styles.detailColumn}>
           <View style={styles.detailItem}>
             <Text style={styles.detailLabel}>CURRENT VALUE</Text>
-            <Text style={styles.detailValue}>{formatCurrency(item.currentValue)}</Text>
+            <Text style={[styles.detailValue, item.priceUnavailable && styles.unavailableText]}>
+              {displayPrice(item.currentValue)}
+            </Text>
           </View>
           <View style={styles.detailItem}>
             <Text style={styles.detailLabel}>PURCHASE COST</Text>
@@ -72,14 +94,14 @@ export const CryptoAssetItem: React.FC<CryptoAssetItemProps> = ({ item }) => {
       <View style={styles.summary}>
         <View style={styles.summaryItem}>
           <Text style={styles.summaryLabel}>PROFIT/LOSS</Text>
-          <Text style={[styles.summaryValue, isProfit ? styles.positiveText : styles.negativeText]}>
-            {formatCurrency(item.profitLoss)}
+          <Text style={[styles.summaryValue, item.priceUnavailable ? styles.unavailableText : (isProfit ? styles.positiveText : styles.negativeText)]}>
+            {displayPrice(item.profitLoss)}
           </Text>
         </View>
         <View style={styles.summaryItem}>
           <Text style={styles.summaryLabel}>% CHANGE</Text>
-          <Text style={[styles.summaryValue, isProfit ? styles.positiveText : styles.negativeText]}>
-            {formatPercentage(item.percentageChange)}
+          <Text style={[styles.summaryValue, item.priceUnavailable ? styles.unavailableText : (isProfit ? styles.positiveText : styles.negativeText)]}>
+            {displayPercentage(item.percentageChange)}
           </Text>
         </View>
       </View>
@@ -190,5 +212,9 @@ const styles = StyleSheet.create({
   summaryValue: {
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  unavailableText: {
+    color: '#6c757d',
+    fontStyle: 'italic',
   },
 });

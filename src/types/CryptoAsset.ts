@@ -10,4 +10,5 @@ export interface CryptoAsset {
   purchaseCost: number;
   profitLoss: number;
   percentageChange: number;
+  priceUnavailable: boolean;
 }
