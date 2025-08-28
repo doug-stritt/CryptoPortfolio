@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { HoldingsData, PriceData } from '../types';
 
-// Import mock data for initial state
 const mockHoldings: HoldingsData = require('../mockData/mockHoldings.json');
 const mockPrices: PriceData = require('../mockData/mockPrices.json');
 
@@ -27,21 +26,18 @@ interface PortfolioState {
 }
 
 export const usePortfolioStore = create<PortfolioState>((set, get) => ({
-  // Initial state
   holdings: mockHoldings,
   prices: mockPrices,
   loading: false,
   error: null,
   lastFetched: null,
 
-  // Synchronous actions
   setHoldings: (holdings) => set({ holdings }),
   setPrices: (prices) => set({ prices }),
   setLoading: (loading) => set({ loading }),
   setError: (error) => set({ error }),
   setLastFetched: (date) => set({ lastFetched: date }),
 
-  // Async actions
   fetchHoldings: async () => {
     try {
       set({ loading: true, error: null });
@@ -86,73 +82,3 @@ export const usePortfolioStore = create<PortfolioState>((set, get) => ({
     }
   },
 }));
-
-// Selector hooks for better performance
-export const useHoldings = () => usePortfolioStore((state) => state.holdings);
-export const usePrices = () => usePortfolioStore((state) => state.prices);
-export const usePortfolioLoading = () => usePortfolioStore((state) => state.loading);
-export const usePortfolioError = () => usePortfolioStore((state) => state.error);
-export const useLastFetched = () => usePortfolioStore((state) => state.lastFetched);
-
-// Computed selectors
-export const usePortfolioData = () => {
-  const holdings = useHoldings();
-  const prices = usePrices();
-
-  if (!holdings || !prices) return null;
-
-  return {
-    holdings,
-    prices,
-  };
-};
-
-// Selector for computed crypto assets
-export const useComputedCryptoAssets = () => {
-  const holdings = useHoldings();
-  const prices = usePrices();
-
-  if (!holdings || !prices) return [];
-
-  return holdings.holdings.map((holding) => {
-    const priceData = prices.prices[holding.symbol];
-
-    if (!priceData) {
-      return {
-        id: holding.id,
-        name: holding.name,
-        ticker: holding.symbol,
-        currentPrice: 0,
-        dailyChange: 0,
-        quantity: holding.quantity,
-        purchasePrice: holding.purchasePrice,
-        currentValue: 0,
-        purchaseCost: holding.quantity * holding.purchasePrice,
-        profitLoss: 0,
-        percentageChange: 0,
-        priceUnavailable: true,
-      };
-    }
-
-    const currentValue = holding.quantity * priceData.currentPrice;
-    const purchaseCost = holding.quantity * holding.purchasePrice;
-    const profitLoss = currentValue - purchaseCost;
-    const percentageChange = ((currentValue - purchaseCost) / purchaseCost) * 100;
-    const dailyChange = ((priceData.currentPrice - priceData.price24hAgo) / priceData.price24hAgo) * 100;
-
-    return {
-      id: holding.id,
-      name: holding.name,
-      ticker: holding.symbol,
-      currentPrice: priceData.currentPrice,
-      dailyChange: dailyChange,
-      quantity: holding.quantity,
-      purchasePrice: holding.purchasePrice,
-      currentValue: currentValue,
-      purchaseCost: purchaseCost,
-      profitLoss: profitLoss,
-      percentageChange: percentageChange,
-      priceUnavailable: false,
-    };
-  });
-};
