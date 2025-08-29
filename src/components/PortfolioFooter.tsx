@@ -1,10 +1,12 @@
 import React from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import { usePortfolioLoading, useLastFetched } from '../store';
+import { View, Text, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
+import { usePortfolioLoading, useLastFetched, usePortfolioError, usePortfolioStore } from '../store';
 
 export const PortfolioFooter: React.FC = () => {
   const loading = usePortfolioLoading();
   const lastFetched = useLastFetched();
+  const error = usePortfolioError();
+  const fetchPortfolioData = usePortfolioStore((state) => state.fetchPortfolioData);
 
   const getLastUpdatedText = () => {
     if (!lastFetched) {
@@ -22,6 +24,17 @@ export const PortfolioFooter: React.FC = () => {
       return `${diffInMinutes} minutes ago`;
     }
   };
+
+  if (error) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.errorText}>Error: {error}</Text>
+        <TouchableOpacity style={styles.retryButton} onPress={fetchPortfolioData}>
+          <Text style={styles.retryButtonText}>Retry</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -60,5 +73,22 @@ const styles = StyleSheet.create({
   lastUpdatedText: {
     fontSize: 12,
     color: '#6c757d',
+  },
+  errorText: {
+    fontSize: 14,
+    color: '#dc3545',
+    textAlign: 'center',
+    marginBottom: 8,
+  },
+  retryButton: {
+    backgroundColor: '#007bff',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 5,
+  },
+  retryButtonText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 'bold',
   },
 });
