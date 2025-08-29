@@ -13,7 +13,8 @@ export default function App() {
   const fetchPortfolioData = usePortfolioStore((state) => state.fetchPortfolioData);
 
   useEffect(() => {
-    fetchPortfolioData();
+    // TODO: Uncomment this when the API is ready
+    //fetchPortfolioData();
   }, []);
 
   if (loading) {
